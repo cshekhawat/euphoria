@@ -1,0 +1,50 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Docs: Scan coverage (whole repo)",
+      "detail": "Inventories undocumented public members across the repo, grouped by layer, to prioritize batches",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["run", "--project", "tools/DocsOnlyGuard", "--", "--scan"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Docs: Generate full batch plan (all files, --all)",
+      "detail": "Lists EVERY .cs file, not just ones with gaps, pre-chunked into batches of 15 per layer, for a full sweep",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["run", "--project", "tools/DocsOnlyGuard", "--", "--scan", "--all"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Docs: Verify comments-only (vs last commit)",
+      "detail": "Checks your current uncommitted changes are comments/doc-comments only",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["run", "--project", "tools/DocsOnlyGuard", "--", "HEAD"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "group": { "kind": "test", "isDefault": true }
+    },
+    {
+      "label": "Docs: Verify comments-only (vs branch)",
+      "detail": "Prompts for a branch/commit to compare against",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["run", "--project", "tools/DocsOnlyGuard", "--", "${input:baseRef}"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "baseRef",
+      "type": "promptString",
+      "description": "Git ref to compare against (branch, commit, or HEAD)",
+      "default": "main"
+    }
+  ]
+}
